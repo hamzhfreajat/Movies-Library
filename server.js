@@ -27,7 +27,6 @@ function Movie(title,poster_path,overview){
 
 
 function handelFavorite(req,res){
-    ahamd();
     res.status(200).send("Welcome to Favorite Page")
 }
 
