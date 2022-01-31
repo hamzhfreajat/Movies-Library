@@ -9,12 +9,16 @@ const server = express();
 server.use(cors());
 
 let userSearch = "Spider-Man";
-const trendUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.APIKEY}&language=en-US`
+const trendUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.APIKEY}&language=en-US`;
+let chargeUrl = `https://api.themoviedb.org/3/movie/changes?api_key=${process.env.APIKEY}&page=1`;
+const certificateUrl = `https://api.themoviedb.org/3/certification/movie/list?api_key=${process.env.APIKEY}`
 
 server.get('/', handelData )
 server.get('/favorite',handelFavorite)
 server.get('/trending', handleTrendingMovies);
 server.get('/search', handleSearchMovies);
+server.get('/changes' , handelChanges);
+server.get('/certificat' , handleCertifate)
 server.get('*',handelNotFound);
 server.use(errorHandler);
 
@@ -75,7 +79,23 @@ function handleSearchMovies  (req , res){
     })
 
 }
+function handelChanges(req,res) {
+    axios.get(chargeUrl)
+        .then((result)=>{
+            res.send(result.data);
+        }).catch((err)=>{
+        errorHandler(err)
+    })
+}
 
+function handleCertifate(req,res){
+    axios.get(certificateUrl)
+        .then((result)=>{
+            res.send(result.data);
+        }).catch((err)=>{
+        errorHandler(err)
+    })
+}
 function errorHandler (err, req, res, next) {
     // res.status(500).json(
     //     {

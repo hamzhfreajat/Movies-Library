@@ -2,7 +2,10 @@
 
 **Author Name**: Hamzh freijat
 
-## WRRC
+## WRRC 
+![Web Request Response cycle](./assets/WRRC.png)
+
+##WRRC using API
 ![Web Request Response cycle](./assets/WRRC.png)
 
 ## Overview
