@@ -10,7 +10,7 @@ server.use(cors());
 server.get('/', handelData )
 server.get('/favorite',handelFavorite)
 server.get('*',handelNotFound);
-app.use(function (err, req, res, next) {
+server.use(function (err, req, res, next) {
     res.status(500).json(
         {
             "status": 500,
