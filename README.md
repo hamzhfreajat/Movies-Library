@@ -2,11 +2,8 @@
 
 **Author Name**: Hamzh freijat
 
-## WRRC 
-![Web Request Response cycle](./assets/WRRC.png)
-
 ##WRRC using API
-![Web Request Response cycle](./assets/WRRC.png)
+![Web Request Response cycle](./assets/WRRC2.png)
 
 ## Overview
 Introduction to node server using express.js framework 
