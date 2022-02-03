@@ -17,14 +17,18 @@ const trendUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${proce
 let chargeUrl = `https://api.themoviedb.org/3/movie/changes?api_key=${process.env.APIKEY}&page=1`;
 const certificateUrl = `https://api.themoviedb.org/3/certification/movie/list?api_key=${process.env.APIKEY}`
 
-server.get('/getMovies',getMovies);
-server.post('/addMovie',addMovies);
 server.get('/', handelData )
 server.get('/favorite',handelFavorite)
 server.get('/trending', handleTrendingMovies);
 server.get('/search', handleSearchMovies);
 server.get('/changes' , handelChanges);
 server.get('/certificat' , handleCertifate)
+server.post('/addMovie',addMovies);
+server.put('/Update/:id',updateMovie);
+server.delete('/DELETE/:id',deleteMovie);
+server.get('/getOneMovies/:id',getOneMovies);
+server.get('/getMovies',getMovies);
+
 server.get('*',handelNotFound);
 server.use(errorHandler);
 
@@ -52,7 +56,7 @@ function addMovies(req,res){
   });
 }
 function getMovies(req,res){
-    let sql = `SELECT * FROM movies_data;`;
+    let sql = `SELECT * FROM movies;`;
     console.log("hi"); 
     client.query(sql).then(data=>{
         console.log(data); 
@@ -60,6 +64,40 @@ function getMovies(req,res){
     }).catch(error=>{
         errorHandler(error,req,res)
     });
+}
+
+function updateMovie(req,res){
+    const movie = req.body; 
+    const id = req.params.id; 
+    console.log('out'); 
+    const sql = `UPDATE movies_data SET title =$1, movies_path = $2, overview = $3 ,comment=$4  WHERE id=$5 RETURNING *;`; 
+    let values=[movie.title,movie.movies_path,movie.overview,movie.comment,id];
+    client.query(sql,values).then(data=>{
+        console.log('in')
+        res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+function deleteMovie(req,res){
+    const id = req.params.id;  
+    const sql = `DELETE FROM movies_data WHERE id=$1;`; 
+    let value= [id];
+    client.query(sql,value).then(data=>{
+        res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+function getOneMovies(req , res){
+    console.log('out'); 
+    const id = req.params.id;
+    const sql = `SELECT * FROM movies_data WHERE id=$1;`
+    const value = [id]; 
+    client.query(sql,value).then(data => {
+        console.log(data); 
+        res.status(200).json(data.rows); 
+    })
 }
 
 function handelData(req,res){
@@ -122,12 +160,7 @@ function handleCertifate(req,res){
     })
 }
 function errorHandler (err, req, res) {
-    res.status(500).json(
-        {
-            "status": 500,
-            "massage": err
-        }
-    )
+    res.status(500).json(err); 
 }
 ;
 // fourth is connecting the client
