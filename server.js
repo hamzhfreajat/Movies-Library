@@ -60,7 +60,7 @@ function addMovies(req,res){
   });
 }
 function getMovies(req,res){
-    let sql = `SELECT * FROM movies;`;
+    let sql = `SELECT * FROM movies_data;`;
     console.log("hi"); 
     client.query(sql).then(data=>{
         console.log(data); 
